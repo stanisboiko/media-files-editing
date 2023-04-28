@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 export PATH="$PATH:/usr/local/bin"
 
