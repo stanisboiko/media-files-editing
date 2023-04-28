@@ -14,7 +14,7 @@ This doesn't work for me since I want to keep logical date taken order without a
 
 ### Precautions
 * Have ```exiftool``` installed
-* Works with ```.jpg```, ```.heic```, ```.mp4```, ```mov```, ```mkv``` as they are the most common files extention for storing processed media and have commond metadata structure
+* Works with ```.jpg```, ```.heic```, ```.mp4```, ```mov```, ```mkv``` as they are the most common files extention for storing processed media and use similar metadata structure
 * Be aware of Time Zones!
 
 ### Its convenient to add as a Quick Action.
