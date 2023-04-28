@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 export PATH="$PATH:/usr/local/bin"
 
@@ -23,10 +23,10 @@ do
 		#test if date is not null or greater than 0
 		if [[ -n $photoDate ]] && [[ $photoDate -gt 0 ]] ; then
 		#overwrite CreateDate
-		touch -t $(date -j -f "%Y%m%d%H%M" -v+$tz $photoDate +%Y%m%d%H%M) "$mediaFile"
+		touch -t "$(date -j -f "%Y%m%d%H%M" -v+$tz $photoDate +%Y%m%d%H%M)" "$mediaFile"
 		#echo "$(date +%Y-%m-%d\ %H:%M:%S) Success: "$mediaFile" has updated date $photoDate" >> "$log"
 		else
-		echo "$(date +%Y-%m-%d\ %H:%M:%S) Error: "$mediaFile" has bad date $photoDate" >> "$log"
+		echo "$(date +%Y-%m-%d\ %H:%M:%S) Error: $mediaFile has bad date $photoDate" >> "$log"
 		fi
 	#test if the file has valid video extention
 	elif [[ "$mediaFile" =~ ^(.*)(\.(M|m)(P|p)4)$ ]] || [[ "$mediaFile" =~ ^(.*)(\.(M|m)(O|o)(V|v))$ ]] || [[ "$mediaFile" =~ ^(.*)(\.(M|m)(K|k)(V|v))$ ]] ; then
@@ -35,13 +35,13 @@ do
 		#test if date is not null or greater than 0
 		if [[ -n $videoDate ]] && [[ $videoDate -gt 0 ]] ; then
 		#overwrite CreateDate
-		touch -t $(date -j -f "%Y%m%d%H%M" -v+$tz $videoDate +%Y%m%d%H%M) "$mediaFile"
+		touch -t "$(date -j -f "%Y%m%d%H%M" -v+$tz $videoDate +%Y%m%d%H%M)" "$mediaFile"
 		#echo "$(date +%Y-%m-%d\ %H:%M:%S) Success: "$mediaFile" has updated date $videoDate" >> "$log"
 		else
-		echo "$(date +%Y-%m-%d\ %H:%M:%S) Error: "$mediaFile" has bad date $videoDate" >> "$log"
+		echo "$(date +%Y-%m-%d\ %H:%M:%S) Error: $mediaFile has bad date $videoDate" >> "$log"
 		fi
 	#write error to log
 	else
-	echo "$(date +%Y-%m-%d\ %H:%M:%S) Error: "$mediaFile" has incompatible media extention" >> "$log"
+	echo "$(date +%Y-%m-%d\ %H:%M:%S) Error: $mediaFile has incompatible media extention" >> "$log"
 	fi
 done
