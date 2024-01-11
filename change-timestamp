@@ -1,0 +1,74 @@
+#!/bin/bash
+#
+# Sets file's timestamp from photo/video taken date
+
+# Check if exiftool location is in the PATH
+if ! [[ $PATH =~ "/usr/local/bin" ]]; then
+  export PATH="$PATH:/usr/local/bin"
+fi
+
+# Log
+if [[ -e $HOME/change-timestamp.log ]] ; then
+  log_file="$HOME/change-timestamp.log"
+else
+  touch "$HOME/change-timestamp.log"
+  log_file="$HOME/change-timestamp.log"
+fi
+
+# Validate if media file has .heic, jpeg, .mp4, .mov or .mkv extention, retreive date then write it as file creation date
+for media_file in "$@"; do
+
+  # PHOTO
+  # Test if the file has valid photo extention
+  if [[ $media_file =~ ^(.*)(\.(J|j)(P|p)(E|e)*(G|g))$ ]] ||
+     [[ $media_file =~ ^(.*)(\.(H|h)(E|e)(I|i)(C|c))$ ]]; then
+
+    # Retrieve CreateDate
+    photo_date=$(exiftool -s "$media_file" \
+    | grep ^CreateDate \
+    | tr -d : \
+    | awk '{print $2$3}' \
+		| cut -c1-12)
+
+    # Test if date is not null or greater than 0
+    if [[ -n $photo_date ]] && [[ $photo_date -gt 0 ]]; then
+      # Overwrite CreateDate
+      touch -t "$photo_date" "$media_file"
+      # Echo "$(date +%Y-%m-%d\ %H:%M:%S) \
+      # SUCCESS: "$media_file" has updated date $photo_date" >> "$log"
+    else
+      echo "$(date +%Y-%m-%d\ %H:%M:%S) \
+      Error: $media_file has bad date $photo_date" >> "$log_file"
+    fi
+
+  # VIDEO
+  # Test if the file has valid video extention
+  elif [[ $media_file =~ ^(.*)(\.(M|m)(P|p)4)$ ]] ||
+       [[ $media_file =~ ^(.*)(\.(M|m)(O|o)(V|v))$ ]] ||
+       [[ $media_file =~ ^(.*)(\.(M|m)(K|k)(V|v))$ ]]; then
+
+    # Retrieve all date metadata, sort in ascending order and trim
+    video_date=$(exiftool -s "$media_file" \
+    | grep Date \
+    | tr -d : \
+    | awk '{print $2$3}' \
+    | sort -ni \
+    | head -n1 \
+    | cut -c1-12)
+
+    # Test if date is not null or greater than 0
+    if [[ -n $video_date ]] && [[ $video_date -gt 0 ]]; then
+      # Overwrite CreateDate
+      touch -t "$video_date" "$media_file"
+      # Echo "$(date +%Y-%m-%d\ %H:%M:%S) \
+      #SUCCESS: "$media_file" has updated date $video_date" >> "$log"
+    else
+      echo "$(date +%Y-%m-%d\ %H:%M:%S) \
+      ERROR: $media_file has bad date $video_date" >> "$log_file"
+    fi
+  # Logging error
+  else
+    echo "$(date +%Y-%m-%d\ %H:%M:%S) \
+    ERROR: $media_file has incompatible media extention" >> "$log_file"
+  fi
+done

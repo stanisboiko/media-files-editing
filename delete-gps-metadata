@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# Deletes sensetive GPS data from mediafile's metadata
+
+# Check if exiftool location is in the PATH
+if ! [[ $PATH =~ "/usr/local/bin" ]]; then
+  export PATH="$PATH:/usr/local/bin"
+fi
+
+# Log
+if [[ -e $HOME/delete-metadata-tags.log ]]; then
+  log_file="$HOME/delete-metadata-tags.log"
+else
+  touch "$HOME/delete-gps-metadata.log"
+  log_file="$HOME/delete-gps-metadata.log"
+fi
+
+delete_tags () {
+  options_tags_array="-overwrite_original -m "
+  for tag in $gps_tags; do
+    options_tags_array+="-${tag}= "
+  done
+
+  exiftool $options_tags_array "$media_file"
+}
+
+# Test if a file has GPS tags and execute delete_tags func
+for media_file in "$@"; do
+
+  gps_tags=$(exiftool -s "$media_file" \
+  | grep GPS \
+  | awk '{print $1}')
+
+	if [[ -n $gps_tags ]]; then
+	  delete_tags
+    # echo "$(date +%Y-%m-%d\ %H:%M:%S) \
+    # SUCCESS: $media_file" deleted GPS metadata>> "$log_file"
+  else
+    echo "$(date +%Y-%m-%d\ %H:%M:%S) \
+    ERROR: $media_file has no GPS metadata" >> "$log_file"
+  fi
+done
