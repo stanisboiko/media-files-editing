@@ -31,12 +31,12 @@ I set it to specifically work with ```.jpg```, ```.heic```, ```.mp4```, ```mov``
 
 ![ChangeDateCreatedTest](https://github.com/stanisboiko/media-files-editing/assets/12517198/d3573f46-76cb-49f5-8e78-d2d22da9bf02)
 
-1. In Terminal ```brew install exiftool```.
-2. Open Automator, select New Document, then select Quick Action document type.
-3. Adjust suitable workflow settings to feed only files and folders in Finder.app.
-4. From Library add Run Shell Script to the workflow.
-5. Choose ```Pass input: as arguments``` and paste a script to the main body. Save.
-6. Select files in Finder, Right Click, and go to Quick Actions.
+1. In Terminal run ```brew install exiftool```.
+2. Open Automator, click on __New Document__, then select __Quick Action__ as a document type.
+3. In the top windows in Workflow receive current set __Document__ in __Finder.app__.
+4. From Library on the left add __Run Shell Script__ to the workflow.
+5. In the added Run Shell Script set __Select Pass input: as arguments__ and paste a script to the main body. Save your workflow.
+6. In Finder right click on selected files, navigate to Quick Actions and apply a script.
 7. Logs are in the user's home directory.
 
 Note that you don't need to add Get Selected Finder items to the workflow as it will result in [executing twice](https://discussions.apple.com/thread/8246012 "") on the same file
