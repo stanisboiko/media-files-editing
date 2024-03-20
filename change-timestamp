@@ -8,11 +8,10 @@ if ! [[ $PATH =~ "/usr/local/bin" ]]; then
 fi
 
 # Log
-if [[ -e $HOME/change-timestamp.log ]] ; then
-  log_file="$HOME/change-timestamp.log"
-else
-  touch "$HOME/change-timestamp.log"
-  log_file="$HOME/change-timestamp.log"
+log_file=$HOME/change-timestamp.log
+
+if ! [[ -e "$log_file" ]] ; then
+  touch "$log_file"
 fi
 
 # Validate if media file has .heic, jpeg, .mp4, .mov or .mkv extention, retreive date then write it as file creation date
@@ -35,7 +34,7 @@ for media_file in "$@"; do
       # Overwrite CreateDate
       touch -t "$photo_date" "$media_file"
       # Echo "$(date +%Y-%m-%d\ %H:%M:%S) \
-      # SUCCESS: "$media_file" has updated date $photo_date" >> "$log"
+      # SUCCESS: "$media_file" has updated date $photo_date" >> "$log_file"
     else
       echo "$(date +%Y-%m-%d\ %H:%M:%S) \
       ERROR: $media_file has bad date $photo_date" >> "$log_file"
@@ -61,7 +60,7 @@ for media_file in "$@"; do
       # Overwrite CreateDate
       touch -t "$video_date" "$media_file"
       # Echo "$(date +%Y-%m-%d\ %H:%M:%S) \
-      #SUCCESS: "$media_file" has updated date $video_date" >> "$log"
+      # SUCCESS: "$media_file" has updated date $video_date" >> "$log_file"
     else
       echo "$(date +%Y-%m-%d\ %H:%M:%S) \
       ERROR: $media_file has bad date $video_date" >> "$log_file"

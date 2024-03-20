@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Deletes sensetive GPS data from mediafile's metadata
+# Deletes GPS data from mediafile's metadata
 
 # Check if exiftool location is in the PATH
 if ! [[ $PATH =~ "/usr/local/bin" ]]; then
@@ -8,11 +8,10 @@ if ! [[ $PATH =~ "/usr/local/bin" ]]; then
 fi
 
 # Log
-if [[ -e $HOME/delete-metadata-tags.log ]]; then
-  log_file="$HOME/delete-metadata-tags.log"
-else
-  touch "$HOME/delete-gps-metadata.log"
-  log_file="$HOME/delete-gps-metadata.log"
+log_file=$HOME/delete-gps-metadata.log
+
+if ! [[ -e "$log_file" ]] ; then
+  touch "$log_file"
 fi
 
 delete_tags () {
